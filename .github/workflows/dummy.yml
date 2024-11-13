@@ -1,0 +1,15 @@
+name: PR comment action
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  your-job:
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/bang') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      # Add your action steps here
+      - name: Run your action
+        run: echo "Action triggered by /bang comment!"
