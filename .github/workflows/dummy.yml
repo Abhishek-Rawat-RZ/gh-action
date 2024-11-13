@@ -1,14 +1,19 @@
 name: PR comment action
 
 on:
-  issue_comment:
-    types: [created, edited, deleted]
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - edited
+      - commented
 
 jobs:
-  yolo:
-    if: contains(github.event.comment.html_url, '/pull/')
-    runs-on: [ubuntu-latest]
+  your-job:
+    if: github.event.comment.body == '/bang'
+    runs-on: ubuntu-latest
+
     steps:
-      - name: First Step
-        if: contains(github.event.comment.body, '/bang')
-        run: echo "Action triggered by /bang comment!"
+      - uses: actions/checkout@v3
+      - name: Run your action
+        run: echo "Action triggered by '/bang' comment on pull request!"
