@@ -6,9 +6,6 @@ on:
 
 jobs:
   run-on-comment:
-    if: |
-      github.event.issue.pull_request &&
-      github.event.comment.body == '/bang'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
