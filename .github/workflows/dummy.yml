@@ -1,19 +1,20 @@
-name: PR comment action
+name: Run on PR comment
 
 on:
-  pull_request_target:
-    types:
-      - opened
-      - synchronize
-      - edited
-      - commented
+  issue_comment:
+    types: [created]
 
 jobs:
-  your-job:
-    if: github.event.comment.body == '/bang'
+  run-on-comment:
+    if: |
+      github.event.issue.pull_request &&
+      github.event.comment.body == '/bang'
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-      - name: Run your action
-        run: echo "Action triggered by '/bang' comment on pull request!"
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Add additional steps here
+      - name: Run Action
+        run: |
+          echo "Running action as /bang comment was detected."
