@@ -1,17 +1,11 @@
 name: Run on PR comment
 
-on:
-  issue_comment:
-    types: [created, edited]
+on: issue_comment
 
 jobs:
-  run-on-comment:
+  pr_commented:
+    name: PR comment
+    if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      # Add additional steps here
-      - name: Run Action
-        run: |
-          echo "Running action as /bang comment was detected."
+      - run: echo "A comment was made on a PR"
