@@ -1,0 +1,11 @@
+name: Comment Workflow
+
+on: issue_comment
+
+jobs:
+  pr_commented:
+    name: PR comment
+    if: ${{ github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "You made a comment on the PR and it is ${{ github.event.comment.body }}"
