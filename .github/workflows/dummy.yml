@@ -23,15 +23,15 @@
 #     steps:
 #       - run: echo "Run the tests and stuff"
 
-name: Comment Workflow
+name: Dynamic Command Dispatcher
 
 on:
   issue_comment:
     types: [created]
 
 jobs:
-  process-comment:
-    name: Process PR Comment
+  dispatch-jobs:
+    name: Dispatch Dynamic Command Workflows
     if: github.event.issue.pull_request
     runs-on: ubuntu-latest
     steps:
@@ -39,43 +39,36 @@ jobs:
         run: |
           echo "Comment content: '${{ github.event.comment.body }}'"
 
-      - name: Check for Commands and Run Actions
+      - name: Parse Commands and Dispatch Workflows
         run: |
           COMMENT="${{ github.event.comment.body }}"
 
-          # Split COMMENT into an array of words
-          IFS=' ' read -r -a words <<< "$COMMENT"
+          # Define command-to-workflow mapping
+          declare -A command_to_workflow
 
-          echo "Words in comment:"
-          for word in "${words[@]}"; do
-            echo "$word"
+          command_to_workflow["/preview"]="generate-preview-url.yml"
+          command_to_workflow["/run-e2e"]="run-e2e-tests.yml"
+          # Add more commands here as needed
+
+          # Convert COMMENT to a set-like associative array for fast lookups
+          declare -A words_set
+          for word in $COMMENT; do
+            words_set["$word"]=1
           done
 
-          # Initialize flags
-          generate_preview_url=false
-          run_e2e_tests=false
+          # Log the set-like associative array
+          echo "Words set:"
+          for word in "${!words_set[@]}"; do
+            echo "Word: $word"
+          done
 
-          # Check for exact commands in words array
-          for word in "${words[@]}"; do
-            if [[ "$word" == "/generate-preview-url" ]]; then
-              generate_preview_url=true
-            elif [[ "$word" == "/run-e2e-tests" ]]; then
-              run_e2e_tests=true
+          # Loop through commands and dispatch if present in words_set
+          for command in "${!command_to_workflow[@]}"; do
+            if [[ -n "${words_set[$command]}" ]]; then
+              echo "Dispatching workflow for command: $command"
+              
+              # Trigger the associated workflow
+              # gh workflow run "${command_to_workflow[$command]}" -f ref="${{ github.ref }}"
             fi
           done
-
-          # Run actions based on flags
-          if [ "$generate_preview_url" = true ]; then
-            echo "Command /generate-preview-url found! Generating the preview URL..."
-            # Replace this echo with actual URL generation commands
-          else
-            echo "/generate-preview-url not found in comment."
-          fi
-
-          if [ "$run_e2e_tests" = true ]; then
-            echo "Command /run-e2e-tests found! Running E2E tests..."
-            # Replace this echo with actual E2E test commands
-          else
-            echo "/run-e2e-tests not found in comment."
-          fi
         shell: bash
