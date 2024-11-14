@@ -48,8 +48,8 @@ jobs:
           # Define command-to-workflow mapping
           declare -A command_to_workflow
 
-          command_to_workflow["/preview"]="generate-preview-url.yml"
-          command_to_workflow["/run-e2e"]="run-e2e-tests.yml"
+          command_to_workflow["/preview"]="generate-preview-url"
+          command_to_workflow["/run-e2e"]="run-e2e-tests"
           # Add more commands here as needed
 
           # Convert COMMENT to a set-like associative array for fast lookups
