@@ -6,10 +6,10 @@ on:
 
 jobs:
   generate-preview-url:
-    name: PR comment
+    name: Preview Url
     if: |
       github.event.issue.pull_request &&
-      github.event.comment.body == '/generate-preview-url'
+      contains(github.event.comment.body, '/generate-preview-url')
     runs-on: ubuntu-latest
     steps:
       - run: echo "Generate the url and stuff"
@@ -18,7 +18,7 @@ jobs:
     name: E2E Tests
     if: |
       github.event.issue.pull_request &&
-      github.event.comment.body == '/run-e2e-tests'
+      contains(github.event.comment.body, '/run-e2e-tests')
     runs-on: ubuntu-latest
     steps:
       - run: echo "Run the tests and stuff"
