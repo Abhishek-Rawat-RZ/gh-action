@@ -43,16 +43,31 @@ jobs:
         run: |
           COMMENT="${{ github.event.comment.body }}"
 
-          echo "Checking if comment contains /generate-preview-url or /run-e2e-tests..."
+          # Split COMMENT into an array of words
+          IFS=' ' read -r -a words <<< "$COMMENT"
 
-          if [[ "$COMMENT" =~ (^|[[:space:]])/generate-preview-url($|[[:space:]]) ]]; then
+          # Initialize flags
+          generate_preview_url=false
+          run_e2e_tests=false
+
+          # Check for exact commands in words array
+          for word in "${words[@]}"; do
+            if [[ "$word" == "/generate-preview-url" ]]; then
+              generate_preview_url=true
+            elif [[ "$word" == "/run-e2e-tests" ]]; then
+              run_e2e_tests=true
+            fi
+          done
+
+          # Run actions based on flags
+          if [ "$generate_preview_url" = true ]; then
             echo "Command /generate-preview-url found! Generating the preview URL..."
             # Replace this echo with actual URL generation commands
           else
             echo "/generate-preview-url not found in comment."
           fi
 
-          if [[ "$COMMENT" =~ (^|[[:space:]])/run-e2e-tests($|[[:space:]]) ]]; then
+          if [ "$run_e2e_tests" = true ]; then
             echo "Command /run-e2e-tests found! Running E2E tests..."
             # Replace this echo with actual E2E test commands
           else
