@@ -1,0 +1,12 @@
+name: Generate Preview URL
+
+jobs:
+  preview-url:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run a dummy command
+        run: echo "Generate the url and stuff"

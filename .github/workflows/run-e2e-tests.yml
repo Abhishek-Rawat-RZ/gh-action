@@ -1,0 +1,12 @@
+name: Run E2E Tests
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run a dummy command
+        run: echo "Run the tests and stuff"
