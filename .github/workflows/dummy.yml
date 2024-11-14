@@ -35,17 +35,27 @@ jobs:
     if: github.event.issue.pull_request
     runs-on: ubuntu-latest
     steps:
+      - name: Log Comment Content
+        run: |
+          echo "Comment content: '${{ github.event.comment.body }}'"
+
       - name: Check for Commands and Run Actions
         run: |
           COMMENT="${{ github.event.comment.body }}"
 
+          echo "Checking if comment contains /generate-preview-url or /run-e2e-tests..."
+
           if [[ "$COMMENT" =~ (^|[[:space:]])/generate-preview-url($|[[:space:]]) ]]; then
-            echo "Generating the preview URL..."
-            # Add the actual commands to generate the URL here
+            echo "Command /generate-preview-url found! Generating the preview URL..."
+            # Replace this echo with actual URL generation commands
+          else
+            echo "/generate-preview-url not found in comment."
           fi
 
           if [[ "$COMMENT" =~ (^|[[:space:]])/run-e2e-tests($|[[:space:]]) ]]; then
-            echo "Running the E2E tests..."
-            # Add the actual commands to run E2E tests here
+            echo "Command /run-e2e-tests found! Running E2E tests..."
+            # Replace this echo with actual E2E test commands
+          else
+            echo "/run-e2e-tests not found in comment."
           fi
         shell: bash
