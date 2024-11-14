@@ -5,11 +5,20 @@ on:
     types: [created]
 
 jobs:
-  pr_commented:
+  generate-preview-url:
     name: PR comment
     if: |
       github.event.issue.pull_request &&
       github.event.comment.body == '/generate-preview-url'
     runs-on: ubuntu-latest
     steps:
-      - run: echo "You made a comment on the PR and it is ${{ github.event.comment.body }}"
+      - run: echo "Generate the url and stuff"
+
+  run-e2e-tests:
+    name: E2E Tests
+    if: |
+      github.event.issue.pull_request &&
+      github.event.comment.body == '/run-e2e-tests'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Run the tests and stuff"
