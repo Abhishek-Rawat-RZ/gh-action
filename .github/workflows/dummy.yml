@@ -1,3 +1,28 @@
+# name: Comment Workflow
+
+# on:
+#   issue_comment:
+#     types: [created]
+
+# jobs:
+#   generate-preview-url:
+#     name: Preview Url
+#     if: |
+#       github.event.issue.pull_request &&
+#       contains(github.event.comment.body, '/generate-preview-url')
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: echo "Generate the url and stuff"
+
+#   run-e2e-tests:
+#     name: E2E Tests
+#     if: |
+#       github.event.issue.pull_request &&
+#       contains(github.event.comment.body, '/run-e2e-tests')
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: echo "Run the tests and stuff"
+
 name: Comment Workflow
 
 on:
@@ -5,20 +30,22 @@ on:
     types: [created]
 
 jobs:
-  generate-preview-url:
-    name: Preview Url
-    if: |
-      github.event.issue.pull_request &&
-      github.event.comment.body =~ /\b\/generate-preview-url\b/
+  process-comment:
+    name: Process PR Comment
+    if: github.event.issue.pull_request
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Generate the URL and stuff"
+      - name: Check for Commands and Run Actions
+        run: |
+          COMMENT="${{ github.event.comment.body }}"
 
-  run-e2e-tests:
-    name: E2E Tests
-    if: |
-      github.event.issue.pull_request &&
-      github.event.comment.body =~ /\b\/run-e2e-tests\b/
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Run the tests and stuff"
+          if [[ "$COMMENT" =~ (^|[[:space:]])/generate-preview-url($|[[:space:]]) ]]; then
+            echo "Generating the preview URL..."
+            # Add the actual commands to generate the URL here
+          fi
+
+          if [[ "$COMMENT" =~ (^|[[:space:]])/run-e2e-tests($|[[:space:]]) ]]; then
+            echo "Running the E2E tests..."
+            # Add the actual commands to run E2E tests here
+          fi
+        shell: bash
