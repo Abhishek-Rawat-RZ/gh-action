@@ -46,6 +46,11 @@ jobs:
           # Split COMMENT into an array of words
           IFS=' ' read -r -a words <<< "$COMMENT"
 
+          echo "Words in comment:"
+          for word in "${words[@]}"; do
+            echo "$word"
+          done
+
           # Initialize flags
           generate_preview_url=false
           run_e2e_tests=false
