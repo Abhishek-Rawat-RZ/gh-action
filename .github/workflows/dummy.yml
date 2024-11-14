@@ -57,9 +57,9 @@ jobs:
           done
 
           # Log the set-like associative array
-          echo "Words set:"
+          echo "Words received in comment: ⬇️ "
           for word in "${!words_set[@]}"; do
-            echo "Word: $word"
+            echo "👉 $word"
           done
 
           # Loop through commands and dispatch if present in words_set
@@ -68,7 +68,7 @@ jobs:
               echo "Dispatching workflow for command: $command"
               
               # Trigger the associated workflow
-              # gh workflow run "${command_to_workflow[$command]}" -f ref="${{ github.ref }}"
+              gh workflow run "${command_to_workflow[$command]}" -f ref="${{ github.ref }}"
             fi
           done
         shell: bash
