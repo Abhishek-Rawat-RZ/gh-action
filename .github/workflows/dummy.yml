@@ -40,6 +40,8 @@ jobs:
           echo "Comment content: '${{ github.event.comment.body }}'"
 
       - name: Parse Commands and Dispatch Workflows
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           COMMENT="${{ github.event.comment.body }}"
 
